@@ -1,6 +1,7 @@
 import React from 'react';
 import { Building2, ShieldAlert, Cpu, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from '../services/api';
 
 export const Footer: React.FC = () => {
   return (
@@ -38,7 +39,7 @@ export const Footer: React.FC = () => {
             <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-3">SIH26130 API & Specs</h4>
             <ul className="space-y-2">
               <li>
-                <a href="http://localhost:8002/docs" target="_blank" rel="noreferrer" className="hover:text-emerald-400 flex items-center gap-1">
+                <a href={`${BACKEND_URL}/docs`} target="_blank" rel="noreferrer" className="hover:text-emerald-400 flex items-center gap-1">
                   OpenAPI / Swagger <ExternalLink className="w-3 h-3" />
                 </a>
               </li>

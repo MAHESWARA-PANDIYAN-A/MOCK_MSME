@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { applicationService } from '../services/applicationService';
+import { API_BASE_URL, BACKEND_URL } from '../services/api';
 import { 
   Award, Download, Printer, ArrowLeft, ShieldAlert, 
   CheckCircle2, QrCode, Building2, RefreshCw 
@@ -35,7 +36,7 @@ export const CertificatePage: React.FC = () => {
 
   const handleDownloadPdf = () => {
     if (udyamNumber) {
-      window.open(`http://localhost:8002/api/public/certificate/${udyamNumber}/pdf`, '_blank');
+      window.open(`${API_BASE_URL}/public/certificate/${udyamNumber}/pdf`, '_blank');
     }
   };
 
@@ -161,7 +162,7 @@ export const CertificatePage: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="w-24 h-24 p-1.5 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-center shrink-0">
               <img
-                src={`http://localhost:8002/generated/qr/${data.udyam_registration_number}_qr.png`}
+                src={`${BACKEND_URL}/generated/qr/${data.udyam_registration_number}_qr.png`}
                 alt="Verification QR"
                 className="w-full h-full object-contain"
                 onError={(e) => {
