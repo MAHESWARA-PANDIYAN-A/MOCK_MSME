@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Udyam MSME Registration Portal (Simulation)"
     API_V1_STR: str = "/api"
     SECRET_KEY: str = "sih26130_mock_udyam_secure_jwt_secret_key_2026_xyz"
+    JWT_SECRET: Optional[str] = None
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     
@@ -44,6 +45,9 @@ class Settings(BaseSettings):
         extra = "allow"
 
 settings = Settings()
+
+if settings.JWT_SECRET:
+    settings.SECRET_KEY = settings.JWT_SECRET
 
 # Ensure certificate generation directory exists
 os.makedirs(settings.CERTIFICATE_OUTPUT_DIR, exist_ok=True)
