@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mock-udyam-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mock-udyam-backend
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=sqlite:///./udyam_mock.db
+      - JWT_SECRET=sih26130_mock_udyam_secure_jwt_secret_key_2026_xyz
+      - MOCK_UDYAM_API_KEY=demo-secret-sih26130-udyam-key
+      - FRONTEND_URL=http://localhost:5174
+      - MAIN_SIH_PORTAL_URL=http://localhost:3000
+      - MOCK_OTP=123456
+      - CERTIFICATE_OUTPUT_DIR=./generated
+    volumes:
+      - ./generated:/app/generated
+      - ./backend/udyam_mock.db:/app/udyam_mock.db
+    restart: unless-stopped
+
+  mock-udyam-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mock-udyam-frontend
+    ports:
+      - "5174:5174"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8002/api
+    depends_on:
+      - mock-udyam-backend
+    restart: unless-stopped
