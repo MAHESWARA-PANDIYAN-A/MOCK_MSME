@@ -77,8 +77,30 @@ def health_check(db: Session = Depends(get_db)):
         "database": db_status
     }
 
-@app.get("/", tags=["Root"])
-def root():
+from fastapi.responses import FileResponse
+
+# Path to frontend build directory
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+FRONTEND_DIST = os.path.join(BASE_DIR, "frontend", "dist")
+FRONTEND_ASSETS = os.path.join(FRONTEND_DIST, "assets")
+
+if os.path.exists(FRONTEND_ASSETS):
+    app.mount("/assets", StaticFiles(directory=FRONTEND_ASSETS), name="frontend-assets")
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_frontend_spa(full_path: str):
+    # Allow API, docs, OpenAPI, generated files to be handled by FastAPI routers
+    if full_path.startswith("api") or full_path.startswith("docs") or full_path.startswith("redoc") or full_path.startswith("openapi.json") or full_path.startswith("generated"):
+        return {"detail": "Not Found"}
+        
+    target_file = os.path.join(FRONTEND_DIST, full_path)
+    if os.path.isfile(target_file):
+        return FileResponse(target_file)
+        
+    index_path = os.path.join(FRONTEND_DIST, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+        
     return {
         "portal": "Udyam MSME Registration Portal (Prototype)",
         "badge": "SIH26130 Prototype — Simulated Udyam Workflow",
